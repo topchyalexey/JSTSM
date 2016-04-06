@@ -1,4 +1,7 @@
-var swig = require('swig');
+var nunjucks = require('nunjucks');
+nunjucks.configure({ autoescape: false });
+
+var dateformat = require('dateformat');
 
 var argv = require('yargs')
     .usage('Usage: $0 -s [src] -o [dest]')
@@ -6,6 +9,10 @@ var argv = require('yargs')
     .alias('s', 'src')
     // .demand('o')
     .alias('o', 'dest')
+    .alias('p', 'project')
+    .alias('a', 'author')
+    .alias('c', 'company')
+    .alias('u', 'use-struct') // default is class
     .argv;
 
 var srcFilePath = argv.s;
@@ -44,10 +51,16 @@ if (json.properties) {
 }
 console.log(properties);
 
+var now = new Date();
+
 // RENDER
-var output = swig.renderFile('templates/template.swift', {
-    name: 'Test',
-    classOrStruct: "struct",
+var output = nunjucks.render('templates/template.swift', {
+    modelName: 'Test',
+    projectName: argv.project || "<PROJECT_NAME>",
+    author: argv.author || "<AUTHOR>",
+    now: dateformat(now, "dd/mm/yy"),
+    copyright: now.getFullYear() + (argv.company ? " "+argv.company : ""), // eg. Copyright © 2016 OpenJet
+    classOrStruct: argv['use-struct'] ? "struct" : "class",
     properties: properties
 });
 
