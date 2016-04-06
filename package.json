@@ -1,0 +1,26 @@
+{
+  "name": "jstsm",
+  "version": "0.1.0",
+  "description": "Json Schema To Swift Model",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/akabab/JSTSM.git"
+  },
+  "keywords": [
+    "JSON",
+    "Swift"
+  ],
+  "author": "akabab",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/akabab/JSTSM/issues"
+  },
+  "homepage": "https://github.com/akabab/JSTSM#readme",
+  "dependencies": {
+    "swig": "^1.4.2"
+  }
+}
