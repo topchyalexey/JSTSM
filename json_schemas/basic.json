@@ -1,0 +1,16 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "id": "",
+    "type": "object",
+    "title": "",
+    "description": "One Crew",
+    "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "age": { "type": "integer" },
+        "height": { "type": "number" },
+        "isRequired": { "type": "boolean", "required": true },
+        "notRequired": { "type": "boolean", "required": false }
+    },
+    "required": ["id"]
+}
