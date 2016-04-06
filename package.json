@@ -24,7 +24,6 @@
   "dependencies": {
     "dateformat": "^1.0.12",
     "nunjucks": "^2.4.1",
-    "swig": "^1.4.2",
     "yargs": "^4.4.0"
   }
 }
