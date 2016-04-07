@@ -2,6 +2,8 @@
 
 JSON Schema To Swift Model
 
+`node index.js -s model.json` -> `Model.swift`
+
 ### Handled
 - [x] basic types
     - `string` -> String
@@ -10,11 +12,10 @@ JSON Schema To Swift Model
     - `boolean` -> Bool
 - [x] `required` -> Optional
 - [x] header
-    - author
-    - project
-    - copyright
-    - date
-- [x] class Or struct (with --use-struct parameter)
+    - project (with -p | --project <project>)
+    - author (with -a | --author <author>)
+    - company (with -c | --company <company>)
+- [x] class Or struct (with --use-struct)
 
 ### TODO
 - [x] `array` type
