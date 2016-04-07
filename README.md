@@ -23,6 +23,8 @@ JSON Schema To Swift Model
 - [x] `$ref`
 - [ ] `format`
 
+- [ ] pass dir as source and transform recursively *.json files
+
 ## Exemple
 
 `Basic.json` file
