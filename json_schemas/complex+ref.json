@@ -1,0 +1,20 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "title": "",
+    "description": "",
+    "properties": {
+        "string": { "type": "string" },
+        "optString": { "type": "string" },
+        "optInteger": { "type": "integer" },
+        "arrayString": { "type": "array", "items": {"type": "string"} },
+        "optArrayString": { "type": "array", "items": {"type": "string"} },
+        "optArrayString_noItems": { "type": "array" },
+        "optNumber": { "type": "number" },
+        "boolean": { "type": "boolean" },
+        "optBoolean": { "type": "boolean" },
+        "reference": { "$ref": "./someRef.json" },
+        "optReference": { "$ref": "./someRef.json" }
+    },
+    "required": ["string", "boolean", "arrayString", "reference"]
+}
