@@ -14,12 +14,13 @@ JSON Schema To Swift Model
     - project
     - copyright
     - date
+- [x] class Or struct (with --use-struct parameter)
 
 ### TODO
 - [x] `array` type
 - [ ] `object` type
 - [ ] `null` type
-- [ ] `$ref`
+- [x] `$ref`
 - [ ] `format`
 
 ## Exemple
