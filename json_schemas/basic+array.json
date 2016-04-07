@@ -7,9 +7,12 @@
         "string": { "type": "string" },
         "optString": { "type": "string" },
         "optInteger": { "type": "integer" },
+        "arrayString": { "type": "array", "items": {"type": "string"} },
+        "optArrayString": { "type": "array", "items": {"type": "string"} },
+        "optArrayString_noItems": { "type": "array" },
         "optNumber": { "type": "number" },
         "boolean": { "type": "boolean" },
         "optBoolean": { "type": "boolean" }
     },
-    "required": ["string", "boolean"]
+    "required": ["string", "boolean", "arrayString"]
 }
