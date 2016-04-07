@@ -4,7 +4,7 @@
   "description": "Json Schema To Swift Model",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
+    "start": "node --harmony index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -23,7 +23,11 @@
   "homepage": "https://github.com/akabab/JSTSM#readme",
   "dependencies": {
     "dateformat": "^1.0.12",
+    "jsonschema": "^1.1.0",
+    "lodash": "^4.8.2",
+    "mkdirp": "^0.5.1",
     "nunjucks": "^2.4.1",
+    "parse-filepath": "^1.0.1",
     "yargs": "^4.4.0"
   }
 }

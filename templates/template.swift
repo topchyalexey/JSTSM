@@ -12,7 +12,7 @@
 
   // MARK: - Properties
 {% for p in properties %}
-  let {{ p.key }}: {{ p.type }}{{ "!" if p.required else "?" }}
+  let {{ p.key }}: {{ p.type }}{{ "?" if not p.required }}
 {%- endfor %}
 
   // MARK: - Inits
