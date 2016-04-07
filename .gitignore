@@ -1,3 +1,6 @@
+# Project
+output
+
 # OSX
 .DS_Store
 
@@ -6,4 +9,3 @@ node_modules
 
 # Npm
 *.log
-
