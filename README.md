@@ -2,6 +2,8 @@
 
 JSON Schema To Swift Model
 
+`node index.js -s model.json` -> `Model.swift`
+
 ### Handled
 - [x] basic types
     - `string` -> String
@@ -10,17 +12,19 @@ JSON Schema To Swift Model
     - `boolean` -> Bool
 - [x] `required` -> Optional
 - [x] header
-    - author
-    - project
-    - copyright
-    - date
+    - project (with -p | --project <project>)
+    - author (with -a | --author <author>)
+    - company (with -c | --company <company>)
+- [x] class Or struct (with --use-struct)
 
 ### TODO
 - [x] `array` type
 - [ ] `object` type
 - [ ] `null` type
-- [ ] `$ref`
+- [x] `$ref`
 - [ ] `format`
+
+- [ ] pass dir as source and transform recursively *.json files
 
 ## Exemple
 
