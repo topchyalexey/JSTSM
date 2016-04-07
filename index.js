@@ -1,5 +1,6 @@
 require('./utils.js');
 
+var dir = require('node-dir');
 var mkdirp = require('mkdirp');
 
 var _ = require('lodash');
@@ -25,18 +26,32 @@ var argv = require('yargs')
     .argv;
 
 var srcFilePath = argv.s;
-console.log("src:", srcFilePath);
+// console.log("src:", srcFilePath);
+
+// dir.readFiles(__dirname, {
+//     match: /.txt$/,
+//     exclude: /^\./
+//     }, function(err, content, next) {
+//         if (err) throw err;
+//         console.log('content:', content);
+//         next();
+//     },
+//     function(err, files){
+//         if (err) throw err;
+//         console.log('finished reading files:',files);
+//     });
+
 
 // READ
 var fs = require('fs');
 var jsonFile = fs.readFileSync(srcFilePath, 'utf8');
 
 var srcFileName = parsePath(srcFilePath).name;
-console.log("srcFileName:", srcFileName);
+// console.log("srcFileName:", srcFileName);
 
 // PARSE & VALIDATE
 var json = JSON.parse(jsonFile);
-console.log("json:", json);
+// console.log("json:", json);
 
 // var draft4schema = JSON.parse(fs.readFileSync("./draft_schemas/draft-04/schema.json", 'utf8'));
 // console.log("draft4schema:", draft4schema);
@@ -45,20 +60,19 @@ console.log("json:", json);
 // var v = jsonschema.validate({"one": 1}, draft4schema);
 // console.log("v:", v);
 
-
-
 var properties = [];
 if (json.properties) {
     properties = Object.keys(json.properties).map(key => {
+        var p = json.properties[key];
+
         return {
             key: key,
-            type: typeForProperty(json.properties[key]),
-            required: json.properties[key].required == true || json.required.contains(key)
+            isRef: p.hasOwnProperty("$ref"),
+            type: typeForProperty(p),
+            required: p.required == true || json.required.contains(key)
         };
     });
 }
-console.log(properties);
-
 
 function typeForProperty(p) {
     var _basicTypes = {
@@ -97,7 +111,6 @@ function typeForProperty(p) {
     }
 
 }
-
 
 // RENDER
 var now = new Date();

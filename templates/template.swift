@@ -19,7 +19,11 @@
 
   init?(json: [String: AnyObject]) {
   {% for p in properties %}
+    {%- if p.isRef %}
+    self.{{ p.key }} = {{ p.type }}(json: json["{{ p.key }}"] as{{ "!" if p.required else "?" }} [String: AnyObject])!
+    {%- else %}
     self.{{ p.key }} = json["{{ p.key }}"] as{{ "!" if p.required else "?" }} {{ p.type }}
+    {%- endif %}
   {%- endfor %}
   }
 
