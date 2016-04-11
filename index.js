@@ -120,9 +120,10 @@ function parseFile(filePath, fileContent) {
 
     // Write
 
-    mkdirp('output');
+    var outputDir = argv.o || './output';
+    mkdirp(outputDir);
 
-    var destFilePath = "./output/" + (argv.o || modelName + ".swift");
+    var destFilePath = outputDir + "/" + modelName + ".swift";
 
     fs.writeFile(destFilePath, output, function (err) {
         if (err) { return WARN(err); }
@@ -159,10 +160,10 @@ function typeForProperty(p) {
                     case "boolean":
                         return _basicTypes[p.type];
                         break;
-                    default: DEBUG("type not handled:", p.type); break;
+                    default: DEBUG  ("type not handled:", p.type); break;
                 }
                 break;
-            default: DEBUG("typeof not handled:", typeof p.type); break;
+            default: DEBUG  ("typeof not handled:", typeof p.type); break;
         }
     }
 }
