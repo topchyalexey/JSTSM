@@ -29,6 +29,7 @@ var argv = require('yargs')
     .alias('p', 'project')
     .alias('a', 'author')
     .alias('c', 'company')
+    .alias('n', 'namespace')
     .boolean('u')
     .alias('u', 'use-struct') // default is class
     .count('verbose')
@@ -41,6 +42,7 @@ function WARN()  { VERBOSE_LEVEL >= 0 && console.log.apply(console, arguments); 
 function INFO()  { VERBOSE_LEVEL >= 1 && console.log.apply(console, arguments); }
 function DEBUG() { VERBOSE_LEVEL >= 2 && console.log.apply(console, arguments); }
 
+var namespace = argv.namespace || "";
 
 // START
 
@@ -106,7 +108,7 @@ function parseFile(filePath, fileContent) {
     // Render
 
     var now = new Date();
-    var modelName = _.upperFirst(fileName);
+    var modelName = namespace + _.upperFirst(fileName);
 
     var output = nunjucks.render('templates/template.swift', {
         modelName: modelName,
@@ -144,7 +146,7 @@ function typeForProperty(p) {
     }
 
     if (p.hasOwnProperty("$ref")) {
-        return _.upperFirst(parsePath(p.$ref).name);
+        return namespace + _.upperFirst(parsePath(p.$ref).name);
     }
 
     if (p.hasOwnProperty("type")) {
