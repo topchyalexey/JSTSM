@@ -39,6 +39,9 @@
     self.{{ p.key }} = json["{{ p.key }}"] as{{ "!" if p.required else "?" }} {{ p.type }}
     {%- endif %}
   {% endfor %}
+  {%- if hasSuperClass %}
+    super.init(json: json)
+  {% endif %}
   }
 
 }
