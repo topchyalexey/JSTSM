@@ -159,7 +159,7 @@ function parseFile(filePath, fileContent) {
         modelName: modelName,
         header: header,
         isStruct: argv['use-struct'],
-        extends: extendArray,
+        extends: (extendArray && extendArray.length > 0) ? extendArray : false,
         hasSuperClass: !!superClass,
         properties: properties
     });
