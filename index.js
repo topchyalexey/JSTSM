@@ -227,7 +227,7 @@ function prepareExtends(superClass) {
 
     var inherits = argv.inherits;
     if (inherits && inherits.length) {
-        if (isStruct) { return WARN("inheritance ignored with struct"); }
+        if (isStruct) { return INFO("inheritance ignored with struct"); }
 
         extendArray = inherits;
     }
