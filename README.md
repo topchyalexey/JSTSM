@@ -2,7 +2,7 @@
 
 JSON Schema To Swift Model
 
-`node index.js -s model.json` -> `Model.swift`
+`./jstsm -s model.json` -> `Model.swift`
 
 ### Handled
 - [x] basic types
@@ -13,15 +13,19 @@ JSON Schema To Swift Model
 - [x] `array` type
 - [x] `$ref`
 - [x] `required` -> Optional
-- [x] header
+- [x] header (with --has-header)
     - project (with -p | --project <project>)
     - author (with -a | --author <author>)
     - company (with -c | --company <company>)
 - [x] class Or struct (with --use-struct)
+- [x] `extends` custom schema key (with `$ref`) for inheritance (with --enable-extends)
 
 ### TODO
-- [ ] `allOf` (extends)
+- [ ] `allOf`, `anyOf`, `oneOf` ..
 - [x] pass dir as source and transform recursively *.json files
+
+## Help
+`./jstsm -h`
 
 ## Exemple
 
