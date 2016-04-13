@@ -10,6 +10,8 @@ JSON Schema To Swift Model
     - `integer` -> Int
     - `number` -> Double
     - `boolean` -> Bool
+- [x] `array` type
+- [x] `$ref`
 - [x] `required` -> Optional
 - [x] header
     - project (with -p | --project <project>)
@@ -18,12 +20,7 @@ JSON Schema To Swift Model
 - [x] class Or struct (with --use-struct)
 
 ### TODO
-- [x] `array` type
-- [ ] `object` type
-- [ ] `null` type
-- [x] `$ref`
-- [ ] `format`
-
+- [ ] `allOf` (extends)
 - [x] pass dir as source and transform recursively *.json files
 
 ## Exemple
