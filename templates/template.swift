@@ -8,7 +8,12 @@
 //  This file has been generated, modify it at your own risks!
 //
 
-{{ "struct" if isStruct else "class" }} {{ modelName }}: JSONDecodable {
+{{ "struct" if isStruct else "class" }} {{ modelName }}{{ ": " if extends }}
+{%- if extends -%}
+  {%- for ext in extends -%}
+    {{ ", " if not loop.first }}{{ ext }}
+  {%- endfor -%}
+{%- endif %} {
 
   // MARK: - Properties
 {% for p in properties %}

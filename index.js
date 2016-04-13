@@ -32,6 +32,12 @@ var argv = require('yargs')
     .describe('o', 'Output dir')
     .boolean('use-struct')
     .describe('use-struct', 'Use `struct` (default is `class`)')
+    .boolean('enable-extends')
+    .describe('enable-extends', 'Enable parsing of `extends` key in json schema')
+    .array('inherits')
+    .describe('inherits', 'Specify inheritances')
+    .array('protocols')
+    .describe('protocols', 'Specify protocols')
     .alias('p', 'project')
     .describe('p', 'Specify project name for header')
     .alias('a', 'author')
@@ -101,6 +107,7 @@ function parseFile(filePath, fileContent) {
 
     // TODO: Validate
 
+
     // Prepare
 
     var properties = [];
@@ -117,6 +124,20 @@ function parseFile(filePath, fileContent) {
         });
     }
 
+
+    // Extends handling
+
+    var handleExtends = argv['enable-extends'];
+
+    if (handleExtends) {
+        var superClass = json.extends && typeForProperty(json.extends);
+    }
+
+    var extendArray = prepareExtends(superClass);
+
+    console.log("extendArray:", extendArray);
+
+
     // Render
 
     var now = new Date();
@@ -129,8 +150,10 @@ function parseFile(filePath, fileContent) {
         now: dateformat(now, "dd/mm/yy"),
         copyright: now.getFullYear() + " " + (argv.company || "<COMPANY>"), // eg. Copyright © 2016 OpenJet
         isStruct: argv['use-struct'],
+        extends: extendArray,
         properties: properties
     });
+
 
     // Write
 
@@ -150,6 +173,8 @@ function parseFile(filePath, fileContent) {
 // HELPERS
 
 function typeForProperty(p) {
+    if (typeof p !== "object") { return; }
+
     var _basicTypes = {
         "string": "String",
         "integer": "Int",
@@ -174,10 +199,34 @@ function typeForProperty(p) {
                     case "boolean":
                         return _basicTypes[p.type];
                         break;
-                    default: DEBUG  ("type not handled:", p.type); break;
+                    default: DEBUG("type not handled:", p.type); break;
                 }
                 break;
-            default: DEBUG  ("typeof not handled:", typeof p.type); break;
+            default: DEBUG("typeof not handled:", typeof p.type); break;
         }
     }
+}
+
+function prepareExtends(superClass) {
+    var extendArray = [];
+
+    if (superClass) {
+        extendArray.push(superClass);
+    }
+
+    var isStruct = argv['use-struct'];
+
+    var inherits = argv.inherits;
+    if (inherits && inherits.length) {
+        if (isStruct) { return WARN("inheritance ignored with struct"); }
+
+        extendArray = inherits;
+    }
+
+    var protocols = argv.protocols;
+    if (!superClass && protocols && protocols.length) {
+        extendArray = extendArray.concat(protocols);
+    }
+
+    return extendArray;
 }
