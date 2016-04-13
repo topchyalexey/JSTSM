@@ -30,8 +30,7 @@ var argv = require('yargs')
     .alias('a', 'author')
     .alias('c', 'company')
     .alias('n', 'namespace')
-    .boolean('u')
-    .alias('u', 'use-struct') // default is class
+    .boolean('use-struct')
     .count('verbose')
     .alias('v', 'verbose')
     .argv;
@@ -116,7 +115,7 @@ function parseFile(filePath, fileContent) {
         author: argv.author || "<AUTHOR>",
         now: dateformat(now, "dd/mm/yy"),
         copyright: now.getFullYear() + " " + (argv.company || "<COMPANY>"), // eg. Copyright © 2016 OpenJet
-        classOrStruct: argv['use-struct'] ? "struct" : "class",
+        isStruct: argv['use-struct'],
         properties: properties
     });
 

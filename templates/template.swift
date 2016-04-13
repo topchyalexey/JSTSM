@@ -8,7 +8,7 @@
 //  This file has been generated, modify it at your own risks!
 //
 
-{{ classOrStruct }} {{ modelName }} {
+{{ "struct" if isStruct else "class" }} {{ modelName }}: JSONDecodable {
 
   // MARK: - Properties
 {% for p in properties %}
