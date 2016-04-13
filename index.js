@@ -38,6 +38,8 @@ var argv = require('yargs')
     .describe('inherits', 'Specify inheritances')
     .array('protocols')
     .describe('protocols', 'Specify protocols')
+    .boolean('has-header')
+    .describe('has-header', 'Add header')
     .alias('p', 'project')
     .describe('p', 'Specify project name for header')
     .alias('a', 'author')
@@ -135,20 +137,27 @@ function parseFile(filePath, fileContent) {
 
     var extendArray = prepareExtends(superClass);
 
-    console.log("extendArray:", extendArray);
+
+    // Header
+
+    if (argv['has-header']) {
+        var now = new Date();
+        var header = {
+            author: argv.author || "<AUTHOR>",
+            now: dateformat(now, "dd/mm/yy"),
+            copyright: now.getFullYear() + " " + (argv.company || "<COMPANY>"), // eg. Copyright © 2016 OpenJet
+        };
+    }
 
 
     // Render
 
-    var now = new Date();
     var modelName = namespace + _.upperFirst(fileName);
 
     var output = nunjucks.render('templates/template.swift', {
         modelName: modelName,
         projectName: argv.project || "<PROJECT_NAME>",
-        author: argv.author || "<AUTHOR>",
-        now: dateformat(now, "dd/mm/yy"),
-        copyright: now.getFullYear() + " " + (argv.company || "<COMPANY>"), // eg. Copyright © 2016 OpenJet
+        header: header,
         isStruct: argv['use-struct'],
         extends: extendArray,
         properties: properties

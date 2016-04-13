@@ -1,9 +1,12 @@
+{% if header -%}
 //
 //  {{ modelName }}.swift
-//  {{ projectName }}
+//  {{ header.projectName }}
 //
-//  Created by {{ author }} on {{ now }}.
-//  Copyright © {{ copyright }}. All rights reserved.
+//  Created by {{ header.author }} on {{ header.now }}.
+//  Copyright © {{ header.copyright }}. All rights reserved.
+//
+{% endif -%}
 //
 //  This file has been generated, modify it at your own risks!
 //
