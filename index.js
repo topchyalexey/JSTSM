@@ -143,6 +143,7 @@ function parseFile(filePath, fileContent) {
     if (argv['has-header']) {
         var now = new Date();
         var header = {
+            projectName: argv.project || "<PROJECT_NAME>",
             author: argv.author || "<AUTHOR>",
             now: dateformat(now, "dd/mm/yy"),
             copyright: now.getFullYear() + " " + (argv.company || "<COMPANY>"), // eg. Copyright © 2016 OpenJet
@@ -156,7 +157,6 @@ function parseFile(filePath, fileContent) {
 
     var output = nunjucks.render('templates/template.swift', {
         modelName: modelName,
-        projectName: argv.project || "<PROJECT_NAME>",
         header: header,
         isStruct: argv['use-struct'],
         extends: extendArray,
