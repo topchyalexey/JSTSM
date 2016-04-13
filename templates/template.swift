@@ -17,7 +17,7 @@
 
   // MARK: - Inits
 
-  init?(json: [String: AnyObject]) {
+  {{"required " if not isStruct }}init?(json: [String: AnyObject]) {
   {% for p in properties %}
     {%- if p.isRef %}
       {%- if p.required %}
