@@ -20,7 +20,7 @@
 
   // MARK: - Properties
 {% for p in properties %}
-  let {{ p.key }}: {{ p.type }}{{ "?" if not p.required }}
+  var {{ p.key }}: {{ p.type }}{{ "?" if not p.required }}
 {% endfor %}
 
   // MARK: - Inits
