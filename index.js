@@ -30,6 +30,8 @@ var argv = require('yargs')
     .describe('s', 'Source file or dir')
     .alias('o', 'output-dir')
     .describe('o', 'Output dir')
+    .alias('t', 'template')
+    .describe('t', 'Specify template file')
     .boolean('use-struct')
     .describe('use-struct', 'Use `struct` (default is `class`)')
     .boolean('enable-extends')
@@ -117,12 +119,17 @@ function parseFile(filePath, fileContent) {
         properties = Object.keys(json.properties).map(key => {
             var p = json.properties[key];
 
-            return {
+            var typeObject = typeObjectForProperty(p);
+
+            var o = {
                 key: key,
-                isRef: p.hasOwnProperty("$ref"),
-                type: typeForProperty(p),
+                isArr: typeObject.isArr,
+                isRef: typeObject.isRef,
+                type: typeObject.typeStr,
                 required: p.required == true || json.required.contains(key)
             };
+
+            return o;
         });
     }
 
@@ -132,7 +139,7 @@ function parseFile(filePath, fileContent) {
     var handleExtends = argv['enable-extends'];
 
     if (handleExtends) {
-        var superClass = json.extends && typeForProperty(json.extends);
+        var superClass = json.extends && typeObjectForProperty(json.extends).typeStr;
     }
 
     var extendArray = prepareExtends(superClass);
@@ -155,7 +162,8 @@ function parseFile(filePath, fileContent) {
 
     var modelName = namespace + _.upperFirst(fileName);
 
-    var output = nunjucks.render('templates/template.swift', {
+    var templateFilePath = 'templates/template.nunjucks';
+    var output = nunjucks.render(templateFilePath, {
         modelName: modelName,
         header: header,
         isStruct: argv['use-struct'],
@@ -182,18 +190,23 @@ function parseFile(filePath, fileContent) {
 
 // HELPERS
 
-function typeForProperty(p) {
-    if (typeof p !== "object") { return; }
+function typeObjectForProperty(p) {
 
     var _basicTypes = {
         "string": "String",
         "integer": "Int",
         "number": "Double",
         "boolean": "Bool",
-    }
+    };
+
+    if (typeof p !== "object") { return; }
 
     if (p.hasOwnProperty("$ref")) {
-        return namespace + _.upperFirst(parsePath(p.$ref).name);
+        return {
+            isArr: false,
+            isRef: true,
+            typeStr: namespace + _.upperFirst(parsePath(p.$ref).name)
+        };
     }
 
     if (p.hasOwnProperty("type")) {
@@ -201,13 +214,23 @@ function typeForProperty(p) {
             case "string":
                 switch (p.type) {
                     case "array":
-                        return "[" + (p.items ? typeForProperty(p.items) : "AnyObject") + "]";
+                        var itemsTypeObject = typeObjectForProperty(p.items);
+
+                        return {
+                            isArr: true,
+                            isRef: itemsTypeObject.isRef,
+                            typeStr: p.items ? itemsTypeObject.typeStr : "AnyObject"
+                        };
                         break;
                     case "string":
                     case "integer":
                     case "number":
                     case "boolean":
-                        return _basicTypes[p.type];
+                        return {
+                            isArr: false,
+                            isRef: false,
+                            typeStr: _basicTypes[p.type]
+                        };
                         break;
                     default: DEBUG("type not handled:", p.type); break;
                 }
