@@ -55,11 +55,11 @@
       {%- else %} {# !isRef #}
 
         {%- if p.required %}
-    self.{{ p.key }} = {{ p.type }}(json: json["{{ p.key }}"] as! [String: AnyObject])!
+    self.{{ p.key }} = {{ p.key }} as! [{{ p.type }}]
 
         {%- else %} {# !required #}
-    if let {{ p.key }} = json["{{ p.key }}"] as? [String: AnyObject] {
-      self.{{ p.key }} = {{ p.type }}(json: {{ p.key }})!
+    if let {{ p.key }} = json["{{ p.key }}"] as? [{{ p.type }}] {
+      self.{{ p.key }} = {{ p.key }}
     }
 
         {%- endif %} {# end required #}
