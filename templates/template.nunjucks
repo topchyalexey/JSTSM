@@ -55,7 +55,7 @@
       {%- else %} {# !isRef #}
 
         {%- if p.required %}
-    self.{{ p.key }} = {{ p.key }} as! [{{ p.type }}]
+    self.{{ p.key }} = json["{{ p.key }}"] as! [{{ p.type }}]
 
         {%- else %} {# !required #}
     if let {{ p.key }} = json["{{ p.key }}"] as? [{{ p.type }}] {
