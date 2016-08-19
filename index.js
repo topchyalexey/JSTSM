@@ -62,7 +62,8 @@ VERBOSE_LEVEL = argv.verbose;
 
 function WARN()  { VERBOSE_LEVEL >= 0 && console.log.apply(console, arguments); }
 function INFO()  { VERBOSE_LEVEL >= 1 && console.log.apply(console, arguments); }
-function DEBUG() { VERBOSE_LEVEL >= 2 && console.log.apply(console, arguments); }
+function DEBUG() {
+    VERBOSE_LEVEL >= 2 && console.log.apply(console, arguments); }
 
 var namespace = argv.namespace || "";
 
@@ -105,33 +106,69 @@ function parseFile(filePath, fileContent) {
 
     try {
         var json = JSON.parse(fileContent);
+        return parseType(json, fileName);
     } catch (e) {
         return WARN("Parsing error:", e);
     }
 
+}
+
+function camelCase (string) {
+    return string.replace( /-([a-z])/ig, function( all, letter ) {
+        return letter.toUpperCase();
+    });
+}
+
+function generateTypeName(typeName) {
+    return camelCase(_.upperFirst(typeName));
+}
+
+
+function generateTypesForDefinitions(json) {
+    // generate defined types
+    if (json.definitions) {
+
+        Object.keys(json.definitions).map(key => {
+            var p = json.definitions[key];
+
+            parseType(p, key);
+        });
+
+    }
+};
+
+function collectTypesForProperties(json) {
+
+    if (json.properties) {
+        return Object.keys(json.properties).map(key => {
+                var p = json.properties[key];
+
+                var typeObject = typeObjectForProperty(p);
+                if ( typeObject == undefined) {
+                    throw "Can't find type mapping for property : " + JSON.stringify(p);
+                }
+                var o = {
+                    key: key,
+                    isArr: typeObject.isArr,
+                    isRef: typeObject.isRef,
+                    type: typeObject.isObj ? parseType(p,key) : typeObject.typeStr,
+                    required: p.required && json.required.contains(key)
+                };
+
+                return o;
+            });
+    }
+    return [];
+}
+function parseType(json, typeName) {
+
+    INFO("Parsing type ", generateTypeName(typeName));
     // TODO: Validate
 
 
-    // Prepare
+    generateTypesForDefinitions(json);
 
-    var properties = [];
-    if (json.properties) {
-        properties = Object.keys(json.properties).map(key => {
-            var p = json.properties[key];
-
-            var typeObject = typeObjectForProperty(p);
-
-            var o = {
-                key: key,
-                isArr: typeObject.isArr,
-                isRef: typeObject.isRef,
-                type: typeObject.typeStr,
-                required: p.required == true || json.required.contains(key)
-            };
-
-            return o;
-        });
-    }
+    var properties = collectTypesForProperties(json);
 
 
     // Extends handling
@@ -160,7 +197,9 @@ function parseFile(filePath, fileContent) {
 
     // Render
 
-    var modelName = namespace + _.upperFirst(fileName);
+
+    var newTypeName = generateTypeName(typeName);
+    var modelName = namespace + newTypeName;
 
     var templateFilePath = 'templates/template.nunjucks';
     var output = nunjucks.render(templateFilePath, {
@@ -181,23 +220,28 @@ function parseFile(filePath, fileContent) {
     var destFilePath = outputDir + "/" + modelName + ".swift";
 
     fs.writeFile(destFilePath, output, function (err) {
-        if (err) { return WARN(err); }
+        if (err) {
+            return WARN(err);
+        }
 
         INFO("File saved to:", destFilePath);
     });
 
+    return newTypeName;
 }
 
 // HELPERS
 
-function typeObjectForProperty(p) {
+var _basicTypes = {
+    "string": "String",
+    "integer": "Int",
+    "number": "Double",
+    "boolean": "Bool",
+};
 
-    var _basicTypes = {
-        "string": "String",
-        "integer": "Int",
-        "number": "Double",
-        "boolean": "Bool",
-    };
+var anonymousTypeIndex = 0;
+
+function typeObjectForProperty(p) {
 
     if (typeof p !== "object") { return; }
 
@@ -215,11 +259,18 @@ function typeObjectForProperty(p) {
                 switch (p.type) {
                     case "array":
                         var itemsTypeObject = typeObjectForProperty(p.items);
-
+                        if (!itemsTypeObject.typeStr) {
+                            itemsTypeObject.typeStr = parseType(p.items, "items" + anonymousTypeIndex);
+                        }
                         return {
                             isArr: true,
                             isRef: itemsTypeObject.isRef,
                             typeStr: p.items ? itemsTypeObject.typeStr : "AnyObject"
+                        };
+                        break;
+                    case "object":
+                        return {
+                            isObj: true
                         };
                         break;
                     case "string":
