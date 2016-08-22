@@ -4,7 +4,7 @@
   "description": "Json Schema To Swift Model",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "./node_modules/.bin/mocha --reporter spec"
   },
   "repository": {
     "type": "git",
@@ -21,10 +21,12 @@
   },
   "homepage": "https://github.com/akabab/JSTSM#readme",
   "dependencies": {
+    "chai": "3.5.0",
     "dateformat": "^1.0.12",
     "jsonschema": "^1.1.0",
     "lodash": "^4.8.2",
     "mkdirp": "^0.5.1",
+    "mocha": "3.0.2",
     "node-dir": "^0.1.11",
     "nunjucks": "^2.4.1",
     "parse-filepath": "^1.0.1",
