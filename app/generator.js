@@ -1,6 +1,5 @@
 'use strict';
 
-
 var util = require('./utils.js');
 
 var dir = require('node-dir');
@@ -48,7 +47,6 @@ function parseFile(filePath, fileContent) {
     } catch (e) {
         return WARN("Parsing error:", e);
     }
-
 }
 
 function camelCase(string) {
@@ -61,7 +59,6 @@ function generateTypeName(typeName) {
     return camelCase(_.upperFirst(typeName));
 }
 
-
 function generateTypesForDefinitions(json) {
     // generate defined types
     if (json.definitions) {
@@ -69,10 +66,8 @@ function generateTypesForDefinitions(json) {
         Object.keys(json.definitions).map(key => {
             var p = json.definitions[key];
 
-        parseType(p, key);
-    })
-        ;
-
+            parseType(p, key);
+        });
     }
 };
 
@@ -95,8 +90,8 @@ function collectTypesForProperties(json) {
         };
 
         return o;
-    })
-        ;
+        });
+
     }
     return [];
 }
@@ -106,11 +101,21 @@ function parseType(json, typeName) {
     INFO("Parsing type ", generateTypeName(typeName));
     // TODO: Validate
 
-    typeObjectForProperty(json);
     generateTypesForDefinitions(json);
 
     var properties = collectTypesForProperties(json);
-
+    if ( properties.length == 0 ) {
+        var thisType = typeObjectForProperty(json);
+        if ( thisType.isArr) {
+            properties.push(  {
+                key: "items",
+                isArr: true,
+                isRef: thisType.isRef,
+                type: thisType.isObj ? parseType(p, key).type : thisType.typeStr,
+                required: thisType.required && json.required.contains(key)
+            })
+        }
+    }
 
     // Extends handling
 
@@ -134,10 +139,7 @@ function parseType(json, typeName) {
         };
     }
 
-
     // Render
-
-
     var newTypeName = generateTypeName(typeName);
     var modelName = namespace + newTypeName;
 
@@ -151,7 +153,6 @@ function parseType(json, typeName) {
         properties: properties
     };
     var output = nunjucks.render(templateFilePath, ctx);
-
 
     // Write
 

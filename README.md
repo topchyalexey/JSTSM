@@ -11,7 +11,7 @@ JSON Schema To Swift Model
     - `number` -> Double
     - `boolean` -> Bool
 - [x] `array` type
-- [x] 'object' type
+- [x] `object` type
 - [x] `$ref`
 - [x] `required` -> Optional
 - [x] header (with --has-header)
@@ -28,6 +28,10 @@ JSON Schema To Swift Model
 ## Help
 `./jstsm -h`
 
+## Test 
+    
+   `./node_modules/mocha/bin/mocha ./test/array.js`
+    
 ## Exemple
 
 `Basic.json` file
