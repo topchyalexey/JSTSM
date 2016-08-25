@@ -82,6 +82,7 @@ function collectTypesForProperties(json) {
             throw "Can't find type mapping for property : " + JSON.stringify(p);
         }
         var o = {
+            description: p.title,
             key: key,
             isArr: typeObject.isArr,
             isRef: typeObject.isRef,
@@ -178,7 +179,7 @@ var _basicTypes = {
     "string": "String",
     "integer": "Int",
     "number": "Double",
-    "boolean": "Bool",
+    "boolean": "Bool"
 };
 
 var anonymousTypeIndex = 0;
