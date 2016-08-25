@@ -1,10 +1,9 @@
 
-
 var expect    = require("chai").expect;
 var app = require("../app/generator");
-var m = require("mocha");
+require("mocha");
 
-m.describe("Array types generation", function() {
+describe("Array types generation", function() {
 
     it("Generated with items of type 'reference'", function() {
         var jsonShema = {
@@ -12,7 +11,7 @@ m.describe("Array types generation", function() {
                 "type": "array",
                 "title": "Атрибуты документов или папки",
                 "items": { "$ref": "#/definitions/attrType"  }
-        }
+        };
         var t = app.parseType(jsonShema, "TypeName");
         expect( t.description ).to.deep.equal( {
                 "extends": false,
@@ -42,7 +41,7 @@ m.describe("Array types generation", function() {
                     }
             },
             "required":["id", "value"]
-        }
+        };
         var t = app.parseType(jsonShema, "TypeName");
         expect( t.description ).to.deep.equal( {
                 modelName: "undefinedTypeName",

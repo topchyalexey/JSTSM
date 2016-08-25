@@ -1,7 +1,5 @@
 'use strict';
 
-var util = require('./utils.js');
-
 var dir = require('node-dir');
 var mkdirp = require('mkdirp');
 
@@ -65,11 +63,10 @@ function generateTypesForDefinitions(json) {
 
         Object.keys(json.definitions).map(key => {
             var p = json.definitions[key];
-
             parseType(p, key);
-        });
+        })
     }
-};
+}
 
 function collectTypesForProperties(json) {
 
@@ -178,7 +175,7 @@ var _basicTypes = {
     "string": "String",
     "integer": "Int",
     "number": "Double",
-    "boolean": "Bool",
+    "boolean": "Bool"
 };
 
 var anonymousTypeIndex = 0;
