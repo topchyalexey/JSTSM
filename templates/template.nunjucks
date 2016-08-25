@@ -17,15 +17,14 @@
     {{ ", " if not loop.first }}{{ ext }}
   {%- endfor -%}
 {%- endif %} {
-
-  // MARK: - Properties
 {% for p in properties %}
+  {%- if p.description %}
+  // {{ p.description }}
+  {%- endif %}
   {%- if p.isArr %}
   var {{ p.key }}: [{{ p.type }}]{{ "?" if not p.required }}
-
   {%- else %}
   var {{ p.key }}: {{ p.type }}{{ "?" if not p.required }}
-
   {%- endif %}
 {% endfor %}
 
@@ -55,7 +54,7 @@
       {%- else %} {# !isRef #}
 
         {%- if p.required %}
-    self.{{ p.key }} = json["{{ p.key }}"] as! [{{ p.type }}]
+    {{ p.key }} = json["{{ p.key }}"] as! [{{ p.type }}]
 
         {%- else %} {# !required #}
     if let {{ p.key }} = json["{{ p.key }}"] as? [{{ p.type }}] {
@@ -71,7 +70,7 @@
       {%- if p.isRef %}
 
         {%- if p.required %}
-    self.{{ p.key }} = {{ p.type }}(json: json["{{ p.key }}"] as! [String: AnyObject])!
+    {{ p.key }} = {{ p.type }}(json: json["{{ p.key }}"] as! [String: AnyObject])!
 
         {%- else %} {# !required #}
     if let {{ p.key }} = json["{{ p.key }}"] as? [String: AnyObject] {
@@ -81,7 +80,7 @@
         {%- endif %} {# end required #}
 
       {%- else %} {# !isRef #}
-    self.{{ p.key }} = json["{{ p.key }}"] as{{ "!" if p.required else "?" }} {{ p.type }}
+    {{ p.key }} = json["{{ p.key }}"] as{{ "!" if p.required else "?" }} {{ p.type }}
 
       {%- endif %} {# end isRef #}
 
