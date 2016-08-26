@@ -33,10 +33,7 @@ JSON Schema To Swift Model
 
 ## Test 
     
-   `
-   ./node_modules/mocha/bin/mocha ./test/array.js
-   ./node_modules/mocha/bin/mocha ./test/object-type.js
-   `
+   `./node_modules/mocha/bin/mocha ./test`
     
 ## Example
 
