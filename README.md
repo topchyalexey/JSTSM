@@ -1,3 +1,6 @@
+
+[![Build Status](https://travis-ci.org/topchyalexey/JSTSM.svg?branch=master)](https://travis-ci.org/topchyalexey/JSTSM)
+
 # JSTSM
 
 JSON Schema To Swift Model
@@ -30,9 +33,9 @@ JSON Schema To Swift Model
 
 ## Test 
     
-   `./node_modules/mocha/bin/mocha ./test/array.js`
+   `./node_modules/mocha/bin/mocha ./test`
     
-## Exemple
+## Example
 
 `Basic.json` file
 ```json

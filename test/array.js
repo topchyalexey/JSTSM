@@ -50,6 +50,7 @@ describe("Array types generation", function() {
                 hasSuperClass: false,
                 isStruct: undefined,
                 properties: [{
+                        description: undefined,
                         isArr: true,
                         isRef: false,
                         key: "value",
