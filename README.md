@@ -1,3 +1,6 @@
+
+[![Build Status](https://travis-ci.org/topchyalexey/JSTSM.svg?branch=master)](https://travis-ci.org/topchyalexey/JSTSM)
+
 # JSTSM
 
 JSON Schema To Swift Model
