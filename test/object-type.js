@@ -13,7 +13,7 @@ describe("Object types generation", function() {
         var jsonShema = { "id":   "#someType", "type": "object", "description": "Desc",
             "properties": {
             "num":       { "type": "number", "title": "Number" },
-            "bool":       { "type": "boolean", "title": "Number" },
+            "bool":       { "type": "boolean", "title": "Bool" },
             "date":   	{ "type": "string",  "format": "date-time", "title": "Date" },
             "place":       { "type": "string", "title": "Str" }
         }};
@@ -25,10 +25,10 @@ describe("Object types generation", function() {
             "isStruct": undefined,
             "modelName": "undefinedTypeName",
             "properties": [
-                {  "isArr": false, "isRef": false,  "key": "num", "required": undefined, "type": "Double"  },
-                {  "isArr": false, "isRef": false,  "key": "bool", "required": undefined, "type": "Bool"  },
-                {  "isArr": false, "isRef": false,  "key": "date", "required": undefined, "type": "String"  },
-                {  "isArr": false, "isRef": false,  "key": "place", "required": undefined, "type": "String"  }
+                {  description: "Number", "isArr": false, "isRef": false,  "key": "num", "required": undefined, "type": "Double"  },
+                {  description: "Bool", "isArr": false, "isRef": false,  "key": "bool", "required": undefined, "type": "Bool"  },
+                {  description: "Date", "isArr": false, "isRef": false,  "key": "date", "required": undefined, "type": "String"  },
+                {  description: "Str", "isArr": false, "isRef": false,  "key": "place", "required": undefined, "type": "String"  }
             ]
         });
     });
