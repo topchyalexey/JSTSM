@@ -104,7 +104,7 @@ function parseType(json, typeName) {
     var properties = collectTypesForProperties(json);
     if ( properties.length == 0 ) {
         var thisType = typeObjectForProperty(json);
-        if ( thisType.isArr) {
+        if ( thisType != undefined && thisType.isArr ) {
             properties.push(  {
                 key: "items",
                 isArr: true,
