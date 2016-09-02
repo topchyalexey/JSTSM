@@ -38,40 +38,11 @@ var argv = require('yargs')
     .alias('h', 'help')
     .epilog('copyright - akabab 2016')
     .argv;
+var Application = require('./app/application');
 
-var fs = require('fs'),
-    dir = require('node-dir'),
-    app = require('./app/generator');
-
-
-var srcPath = argv.s;
 
 try {
-    app.withArgs(argv);
-
-    fs.accessSync(srcPath);
-    var stat = fs.lstatSync(srcPath);
-
-    if (stat.isDirectory()) {
-        dir.readFiles(srcPath, {
-                match: /.json$/,
-            }, function (err, fileContent, filePath, next) {
-                if (err) throw err;
-
-                app.parseFile(filePath, fileContent);
-                next();
-            },
-            function (err, files){
-                if (err) throw err;
-            });
-
-    }
-    else if (stat.isFile()) {
-        var fileContent = fs.readFileSync(srcPath, 'utf8');
-
-        app.parseFile(srcPath, fileContent);
-    }
-
+    Application.run(argv);
 } catch (e) {
     return console.error(e.message);
 }

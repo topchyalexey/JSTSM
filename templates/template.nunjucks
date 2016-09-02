@@ -13,82 +13,85 @@
 
 {{ "struct" if isStruct else "class" }} {{ modelName }}: JSONInitializableProtocol{{ ", " if extends }}
 {%- if extends -%}
-  {%- for ext in extends -%}
-    {{ ", " if not loop.first }}{{ ext }}
-  {%- endfor -%}
+    {%- for ext in extends -%}
+        {{ ", " if not loop.first }}{{ ext }}
+    {%- endfor -%}
 {%- endif %} {
+
 {% for p in properties %}
-  {%- if p.description %}
-  // {{ p.description }}
-  {%- endif %}
-  {%- if p.isArr %}
-  var {{ p.key }}: [{{ p.type }}]{{ "?" if not p.required }}
-  {%- else %}
-  var {{ p.key }}: {{ p.type }}{{ "?" if not p.required }}
-  {%- endif %}
+
+{%- if p.desc %}
+  // {{ p.desc }}
+{%- endif %}
+{%- if p.isEnum %}
+  enum {{ p.typeName }}: String {
+  {% for caseValue in p.enumValues -%}
+      case {{ caseValue.name }} = "{{ caseValue.value }}"
+  {% endfor -%}
+  }
+{%- endif %}
+
+{%- if p.isArr %}
+  var {{ p.name }}: [{{ p.typeName }}]{{ "?" if not p.isRequired }}
+{%- else %}
+  var {{ p.name }}: {{ p.typeName }}{{ "?" if not p.isRequired }}
+{%- endif %}
 {% endfor %}
 
-  // MARK: - Inits
+  // MARK: - Init
 
-  {{"required " if not isStruct }}init?(json: [String: AnyObject]) {
-  {% for p in properties %}
-
-    {%- if p.isArr %}
-
-      {%- if p.isRef %}
-
-        {%- if p.required %}
-    let {{ p.key }} = json["{{ p.key }}"] as! [AnyObject]
-    self.{{ p.key }} = {{ p.key }}.map {
-      return {{ p.type }}(json: $0 as! [String: AnyObject])!
+  {{ "required " if not isStruct }}init?(json: [String: AnyObject]) {
+{% for p in properties %}
+{%- if p.isArr %}
+{%- if p.isRef %}
+{%- if p.isRequired %}
+    let {{ p.name }} = json["{{ p.key }}"] as! [[String: AnyObject]]
+    self.{{ p.name}} = {{ p.name }}.map {
+      return {{ p.typeName }}(json: $0)!
     }
-
-        {%- else %} {# !required #}
-    if let {{ p.key }} = json["{{ p.key }}"] as? [AnyObject] {
-      self.{{ p.key }} = {{ p.key }}.map {
-        return {{ p.type }}(json: $0 as! [String: AnyObject])!
+{%- else %} {# !required #}
+    if let {{ p.name }} = json["{{ p.key }}"] as? [[String: AnyObject]] {
+      self.{{ p.name }} = {{ p.name }}.map {
+        return {{ p.typeName }}(json: $0)!
       }
     }
-        {%- endif %} {# end required #}
-
-      {%- else %} {# !isRef #}
-
-        {%- if p.required %}
-    {{ p.key }} = json["{{ p.key }}"] as! [{{ p.type }}]
-
-        {%- else %} {# !required #}
-    if let {{ p.key }} = json["{{ p.key }}"] as? [{{ p.type }}] {
-      self.{{ p.key }} = {{ p.key }}
+{%- endif %} {# end required #}
+{%- else %} {# !isRef #}
+{%- if p.isRequired %}
+    {{ p.name }} = json["{{ p.key }}"] as! [{{ p.typeName }}]
+{%- else %} {# !required #}
+    if let {{ p.name }} = json["{{ p.key }}"] as? [{{ p.typeName }}] {
+      self.{{ p.name }} = {{ p.name }}
     }
-
-        {%- endif %} {# end required #}
-
-      {%- endif %} {# end isRef #}
-
-    {%- else %} {# !isArr #}
-
-      {%- if p.isRef %}
-
-        {%- if p.required %}
-    {{ p.key }} = {{ p.type }}(json: json["{{ p.key }}"] as! [String: AnyObject])!
-
-        {%- else %} {# !required #}
-    if let {{ p.key }} = json["{{ p.key }}"] as? [String: AnyObject] {
-      self.{{ p.key }} = {{ p.type }}(json: {{ p.key }})!
+{%- endif %} {# end required #}
+{%- endif %} {# end isRef #}
+{%- else %} {# !isArr #}
+{%- if p.isRef %}
+{%- if p.isRequired %}
+    {{ p.name }} = {{ p.typeName }}(json: json["{{ p.key }}"] as! [String: AnyObject])!
+{%- else %} {# !required #}
+    if let {{ p.name }} = json["{{ p.key }}"] as? [String: AnyObject] {
+      self.{{ p.name }} = {{ p.typeName }}(json: {{ p.name }})!
     }
-
-        {%- endif %} {# end required #}
-
-      {%- else %} {# !isRef #}
-    {{ p.key }} = json["{{ p.key }}"] as{{ "!" if p.required else "?" }} {{ p.type }}
-
-      {%- endif %} {# end isRef #}
-
-    {%- endif %} {# end isArr #}
-  {% endfor %}
-  {%- if hasSuperClass %}
+{%- endif %} {# end required #}
+{%- else %}
+{%- if p.isEnum %} {# !isRef #}
+{%- if p.isRequired %}
+    {{ p.name }} = {{ p.typeName }}(rawValue: json["{{ p.key }}"] as! String)!
+{%- else %} {# !required #}
+    if let {{ p.name }} = json["{{ p.key }}"] as? String {
+      self.{{ p.name }} = {{ p.typeName }}(rawValue: {{ p.name }})!
+    }
+{%- endif %} {# end required #}
+{%- else %}
+    {{ p.name }} = json["{{ p.key }}"] as{{ "!" if p.isRequired else "?" }} {{ p.typeName }}
+{%- endif %}
+{%- endif %}
+{%- endif %} {# end isArr #}
+{% endfor %}
+{%- if hasSuperClass %}
     super.init(json: json)
-  {% endif %}
+{% endif %}
   }
 
 }
