@@ -3,14 +3,10 @@
 //  {{ modelName }}.swift
 //  {{ header.projectName }}
 //
-//  Created by {{ header.author }} on {{ header.now }}.
+//  This file has been generated, modify it at your own risks!
 //  Copyright © {{ header.copyright }}. All rights reserved.
 //
-{% endif -%}
-//
-//  This file has been generated, modify it at your own risks!
-//
-
+{% endif %}
 {{ "struct" if isStruct else "class" }} {{ modelName }}: JSONInitializableProtocol{{ ", " if extends }}
 {%- if extends -%}
     {%- for ext in extends -%}
