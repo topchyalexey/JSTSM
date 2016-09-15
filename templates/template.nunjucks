@@ -7,7 +7,7 @@
 //  Copyright © {{ header.copyright }}. All rights reserved.
 //
 {% endif %}
-{{ "struct" if isStruct else "class" }} {{ modelName }}: JSONInitializableProtocol{{ ", " if extends }}
+public {{ "struct" if isStruct else "class" }} {{ modelName }}: JSONInitializableProtocol{{ ", " if extends }}
 {%- if extends -%}
     {%- for ext in extends -%}
         {{ ", " if not loop.first }}{{ ext }}
@@ -20,7 +20,7 @@
   // {{ p.desc }}
 {%- endif %}
 {%- if p.isEnum %}
-  enum {{ p.typeName }}: String {
+  public enum {{ p.typeName }}: String {
   {% for caseValue in p.enumValues -%}
       case {{ caseValue.name }} = "{{ caseValue.value }}"
   {% endfor -%}
@@ -28,15 +28,15 @@
 {%- endif %}
 
 {%- if p.isArr %}
-  var {{ p.name }}: [{{ p.typeName }}]{{ "?" if not p.isRequired }}
+  public var {{ p.name }}: [{{ p.typeName }}]{{ "?" if not p.isRequired }}
 {%- else %}
-  var {{ p.name }}: {{ p.typeName }}{{ "?" if not p.isRequired }}
+  public var {{ p.name }}: {{ p.typeName }}{{ "?" if not p.isRequired }}
 {%- endif %}
 {% endfor %}
 
   // MARK: - Init
 
-  {{ "required " if not isStruct }}init?(json: [String: AnyObject]) {
+  public {{ "required " if not isStruct }}init?(json: [String: AnyObject]) {
 {% for p in properties %}
 {%- if p.isArr %}
 {%- if p.isRef %}
