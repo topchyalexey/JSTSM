@@ -9,7 +9,7 @@ Array.prototype.contains = function (item) {
 };
 
 function camelCase(string) {
-    return string.replace(/^([-_]*)/, '').replace(/[-_]([a-zа-я])/ig, function (all, letter) {
+    return string.replace(/^([-_ ]*)/, '').replace(/[-_]([a-zа-я])/ig, function (all, letter) {
         return letter.toUpperCase();
     });
 }
